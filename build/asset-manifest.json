@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ff02f4b5.css",
+    "main.js": "/static/js/main.103e9868.js",
+    "static/js/453.3a79cc68.chunk.js": "/static/js/453.3a79cc68.chunk.js",
+    "static/media/Weston_Band.jpg": "/static/media/Weston_Band.b6812a3f8965fe4178f9.jpg",
+    "static/media/OnlineLibrary.png": "/static/media/OnlineLibrary.4da6f9d36570ada70eb5.png",
+    "static/media/drona_view.jpg": "/static/media/drona_view.4d25ba53404e61438fd7.jpg",
+    "static/media/AddNewbook.png": "/static/media/AddNewbook.289c8e09edd9e71738cf.png",
+    "static/media/Report.png": "/static/media/Report.92f0f216cb7a7948786f.png",
+    "static/media/Employee.png": "/static/media/Employee.ca43f9388a3f7735bfa1.png",
+    "static/media/User.png": "/static/media/User.52a1cd2c1f495e3d5d05.png",
+    "static/media/Library_kns.jpg": "/static/media/Library_kns.6616b80647f7d989f58c.jpg",
+    "static/media/catalog.png": "/static/media/catalog.3a39b1edca14e59085bd.png",
+    "static/media/Profile.png": "/static/media/Profile.0190eb1585b9312a63d9.png",
+    "index.html": "/index.html",
+    "main.ff02f4b5.css.map": "/static/css/main.ff02f4b5.css.map",
+    "main.103e9868.js.map": "/static/js/main.103e9868.js.map",
+    "453.3a79cc68.chunk.js.map": "/static/js/453.3a79cc68.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ff02f4b5.css",
+    "static/js/main.103e9868.js"
+  ]
+}
