@@ -4,22 +4,10 @@ import drona_view from './Images/drona_view.jpg';
 import Library_kns from './Images/Library_kns.jpg';
 import Weston_Band from './Images/Weston_Band.jpg';
 
-import Axios from 'axios';
-import { useEffect, useState } from 'react';
+
 //import { await } from 'react-router-dom';
 
 const Home = ()=> {
-
-const [data,setData]=useState("");
-
-const getData=async()=>{
-  const response=await Axios.get("http://localhost:3000/getData");
-  setData(response.data);
-};
-
-useEffect(()=>{
-  getData();
-},[]);
 
   return (
     <div className="Home">
@@ -32,7 +20,7 @@ useEffect(()=>{
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" >
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="">{data}</a>
+          <a class="nav-link active" aria-current="page" href="">Link</a>
         </li>
       </ul>
       

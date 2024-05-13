@@ -27,7 +27,7 @@ function Login() {
     }
     console.log("clicked");
 
-    fetch("http://localhost:3000/loginSystem",{
+    fetch("http://localhost:3000/login",{
       method:'post',
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(LoginData)
