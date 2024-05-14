@@ -2,14 +2,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //import drona_view from './Images/drona_view.jpg';
 import catalog_view from './Images/catalog.png';
 import OnlineLibrary_view from './Images/OnlineLibrary.png';
-import Profile_view from './Images/Profile.png';
 import Report_view from './Images/Report.png';
 import User_view from './Images/User.png';
 import Employee_view from './Images/Employee.png';
 
+import NavigationBar from './NavBar.js';
+
 //import { useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+
 
 //import QrReader from 'react-qr-reader';
 
@@ -18,7 +19,7 @@ import Cookies from 'js-cookie';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 //import {useEffect, useState} from 'react';
 
-import Dropdown from 'react-bootstrap/Dropdown';
+
 
 function DashBoard(){
   //const location = useLocation();
@@ -32,23 +33,9 @@ function DashBoard(){
 
   ///////////////////////////////////////////////////
   // State variables to hold user_id and user_name
-  const [userId, setUserId] = useState('');
-  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    // Read cookies set by the backend
-    const userIdCookie = Cookies.get('user_id');
-    const userNameCookie = Cookies.get('user_name');
-
-    // Set state variables with the values from the cookies
-    if (userIdCookie) {
-      setUserId(userIdCookie);
-    }
-    if (userNameCookie) {
-      setUserName(userNameCookie);
-    }
-
-    ///////////////////////
+    
       // Define a variable to store the active camera stream
 let activeCameraStream;
 
@@ -111,47 +98,8 @@ function stopScanning() {
   }, []);
     return(
         <div className='DashBoard'>
-        <div>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary absolute">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="?"><b>The Library Management Syatem,<br/> R/Kalawana National School </b></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" >
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="?">Home</a>
-        </li>
-        
 
-        <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic" style={{width:'10%'}}>
-        <img src={Profile_view}  style={{ width: '50%', height: '50%' }} alt=''/>
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu>
-      <img src={Profile_view}  style={{ width: '10%', height: '10%'}} alt=''/>
-        <Dropdown.Item >{userName}</Dropdown.Item>
-        <Dropdown.Item >{userId}</Dropdown.Item>
-        <Dropdown.Item >Contact</Dropdown.Item>
-        <Dropdown.Item >Address</Dropdown.Item>
-        <button>Edit</button>
-      </Dropdown.Menu>
-    </Dropdown>
-
-
-      </ul>
-
-
-      
-        <button class="btn btn-outline-danger text-bg-dark-subtle " onClick={()=>{window.location.href="/"} }>Sign Out</button>
-      
-    </div>
-  </div>
-</nav>
-</div>
-
+        <NavigationBar showSearch={false}/>
 
 <div class="px-3">
 <div class="card-group">

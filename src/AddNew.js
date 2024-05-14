@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import { response } from 'express';
+import NavigationBar from './NavBar.js';
 
 import { useState } from 'react';
 
@@ -40,6 +41,7 @@ function AddNewBook() {
 
   return (
     <div className="AddNewBook">
+    <NavigationBar showSearch={false}/>
       <section className="vh-90 pt-5">
         <div className="container py-5 h-100">
           <div className="row d-flex align-items-center justify-content-center h-100">
