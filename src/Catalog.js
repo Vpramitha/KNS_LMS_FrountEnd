@@ -13,6 +13,10 @@ function Catalog() {
   const [qrData, setQRData] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [showIssueModal, setShowIssueModal] = useState(false);
+  const [showAddBookModal, setShowAddBookModal] = useState(false);
+  const [AddBookRecord, setAddBookRecord] = useState({});
+  //const [Categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -90,20 +94,8 @@ const issueBook = async (id) => {
   if (!confirmed) {
     return; // Do nothing if user cancels
   }
-
-  try {
-    // Construct the data object with the required id field
-    const data = { id };
-
-    // Send the POST request with the data object as the request body
-    const response = await Axios.post('http://localhost:3000/issueBook', data);
-
-    // Handle response if needed
-    console.log('Response:', response.data);
-  } catch (error) {
-    console.error('Error saving data:', error);
-  }
   handleCloseModal();
+  setShowIssueModal(true);
 };
 
 
@@ -121,6 +113,21 @@ const issueBook = async (id) => {
     );
     setSearchResults(filteredData);
   };
+
+  const addBook = () => {
+    console.log(AddBookRecord);
+  Axios.post('http://localhost:3000/addBook', AddBookRecord)
+    .then(response => {
+      // Handle success, e.g., show a success message
+      console.log('Book added successfully:', response.data);
+      setShowAddBookModal(false);
+    })
+    .catch(error => {
+      // Handle error, e.g., show an error message
+      console.error('Error adding book:', error);
+    });
+};
+
 
   return (
     <div className='Catalog'>
@@ -219,9 +226,115 @@ const issueBook = async (id) => {
       
   </Modal.Footer>
 </Modal>
+
+<Modal show={showIssueModal} onHide={() => setShowIssueModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Issue The Book</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+
+  <Form>
+    <Form.Group controlId="formTitle">
+      <Form.Label>Title</Form.Label>
+      <Form.Control type="text" value={selectedRecord ? selectedRecord.Title : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Title: e.target.value })} />
+    </Form.Group>
+    <Form.Group controlId="formAuthor">
+      <Form.Label>Author</Form.Label>
+      <Form.Control type="text" value={selectedRecord ? selectedRecord.Author : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Author: e.target.value })} />
+    </Form.Group>
+    <Form.Group controlId="formPrice">
+      <Form.Label>Price</Form.Label>
+      <Form.Control type="text" value={selectedRecord ? selectedRecord.Price : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Price: e.target.value })} />
+    </Form.Group>
+  </Form>
+    
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowQRModal(false)}>
+      Close
+    </Button>
+    <Button variant="primary" >
+        Issue
+      </Button>
+      
+  </Modal.Footer>
+</Modal>
+
+{/*add book modal */}
+
+
+<Modal show={showAddBookModal} onHide={() => setShowAddBookModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Add a new Book</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+  
+  <Form>
+    <Form.Group controlId="formISBN">
+      <Form.Label>ISBN</Form.Label>
+      <Form.Control type="text" placeholder='ISBN' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, ISBN: e.target.value }))} 
+ />
+    </Form.Group>
+    <Form.Group controlId="formTitle">
+      <Form.Label>Title</Form.Label>
+      <Form.Control type="text" placeholder='Title' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, Title: e.target.value }))} 
+/>
+    </Form.Group>
+    <Form.Group controlId="formAuthor">
+      <Form.Label>Author</Form.Label>
+      <Form.Control type="text" placeholder='Author' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, Author: e.target.value }))} 
+/>
+    </Form.Group>
+
+  <Form.Group controlId="formPublisher">
+      <Form.Label>Publisher</Form.Label>
+      <Form.Control type="text" placeholder='Publisher' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, Publisher: e.target.value }))} 
+/>
+    </Form.Group>
+
+    <Form.Group controlId="formDescription">
+      <Form.Label>Description</Form.Label>
+      <Form.Control type="text" placeholder='Description' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, Description: e.target.value }))} 
+/>
+    </Form.Group>
+
+    <Form.Group controlId="formNumberOfPages">
+      <Form.Label>Number Of Pages</Form.Label>
+      <Form.Control type="text" placeholder='Number Of Pages' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, NumberOfPages: e.target.value }))} 
+/>
+    </Form.Group>
+
+    <Form.Group controlId="formCategoryId">
+      <Form.Label>CategoryId</Form.Label>
+      <Form.Control type="text" placeholder='000' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, CategoryId: e.target.value }))} />
+    </Form.Group>
+
+    <Form.Group controlId="formPrice">
+      <Form.Label>Price</Form.Label>
+      <Form.Control type="text" placeholder='Price in Rs.' onChange={(e) => setAddBookRecord(newRecord => ({ ...newRecord, Price: e.target.value }))} 
+/>
+    </Form.Group>
+  </Form>
+
+  
+    
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowAddBookModal(false)}>
+      Close
+    </Button>
+    <Button variant="success" onClick={()=>addBook()}>
+        Add The Book
+      </Button>
+      
+  </Modal.Footer>
+</Modal>
+
+
+
 </div>
       <div style={{ position: 'fixed', bottom: '0', right: '0', zIndex: '1000', backgroundColor: 'white', textAlign: 'center', padding: '10px' }}>
-        <img src={addBookView} alt="" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={()=>{window.location.href="/AddNewBook"} }/>
+        <img src={addBookView} alt="" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={()=>{setShowAddBookModal(true)}}/>
       </div>
     </div>
   );
