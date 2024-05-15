@@ -5,7 +5,7 @@ import Login from './Login';
 import Signup from './Signup';
 import DashBoard from './DashBoard';
 import Catalog from './Catalog';
-import AddNewBook from './AddNew';
+
 import User from './User';
 import Employee from './Employee';
 
@@ -18,7 +18,6 @@ function App() {
         <Route path="/Signup" element={<Signup/>} /> {/* Use element prop instead of component */}
         <Route path="/DashBoard" element={<DashBoard/>}/>
         <Route path="/Catalog" element={<Catalog/>}/>
-        <Route path="/AddNewBook" element={<AddNewBook/>}/>
         <Route path="/User" element={<User/>}/>
         <Route path="/Employee" element={<Employee/>}/>
         {/* Add more routes as needed */}
