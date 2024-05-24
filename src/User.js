@@ -1,136 +1,215 @@
 import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-
-import Button from 'react-bootstrap/Button';
-
-import Form from 'react-bootstrap/Form';
-
-
-import Table from 'react-bootstrap/Table';
-import Modal from 'react-bootstrap/Modal';
-
+import { Tabs, Tab, Table } from 'react-bootstrap';
+import axios from 'axios';
 import NavigationBar from './NavBar.js';
+import addBookView from './Images/AddNewbook.png';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import AddNewStudentModule from './AddNewStudent.js';
+import AddNewTeacherModule from './AddNewTeacherModal.js';
+import AddNewAdminModule from './AddNewAdminModal.js';
 
-//import QRCode from 'qrcode.react';
+function User() {
+  const [key, setKey] = useState('students');
+  const [studentsData, setStudentsData] = useState([]);
+  const [teachersData, setTeachersData] = useState([]);
+  const [adminsData, setAdminsData] = useState([]);
 
-//import QRCodePrinter from './QRPrinter';
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
-//import {Row, Col } from 'react-bootstrap';
+  const [showAddNewStudentModal, setShowAddNewStudentModal] = useState(false);
+  const [showAddNewTeacherModal, setShowAddNewTeacherModal] = useState(false);
+  const [showAddNewAdminModal, setShowAddNewAdminModal] = useState(false);
 
-import addBook_view from './Images/AddNewbook.png';
-
-function Catalog() {
-  const [data, setData] = useState([]);
-const [selectedRecord, setSelectedRecord] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-
-  //const [showQRModal, setShowQRModal] = useState(false);
-//const [qrData, setQRData] = useState('');
-
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchStudentsData = async () => {
     try {
-      const response = await Axios.get('http://localhost:3000/LoadMembers');
-      setData(response.data);
+      const response = await axios.get('http://localhost:3000/loadStudents');
+      // Ensure the response data is an array
+      if (Array.isArray(response.data)) {
+        setStudentsData(response.data);
+      } else {
+        console.error('Unexpected response format for students data:', response.data);
+      }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching students data:', error);
+    }
+  };
+
+  const fetchTeachersData = async () => {
+    try {
+      const response = await axios.post('/api/teachers', {});
+      // Ensure the response data is an array
+      if (Array.isArray(response.data)) {
+        setTeachersData(response.data);
+      } else {
+        console.error('Unexpected response format for teachers data:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching teachers data:', error);
+    }
+  };
+
+  const fetchAdminsData = async () => {
+    try {
+      const response = await axios.post('/api/admin', {});
+      // Ensure the response data is an array
+      if (Array.isArray(response.data)) {
+        setAdminsData(response.data);
+      } else {
+        console.error('Unexpected response format for admins data:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching admins data:', error);
     }
   };
 
   const handleRecordClick = (record) => {
-    setSelectedRecord(record);
-    setShowModal(true);
+    console.log(record);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    // Filter data based on search query
+    const filteredData = studentsData.filter((item) =>
+      item.UserName.toLowerCase().includes(query.toLowerCase()));
+    setSearchResults(filteredData);
   };
 
-  /*const generateQRCode = (record) => {
-  const data = JSON.stringify(record); // Convert record to JSON string
-  setQRData(data); // Set QR code data
-  setShowQRModal(true); // Show the modal
-};*/
+  useEffect(() => {
+    if (key === 'students') {
+      fetchStudentsData();
+    } else if (key === 'teachers') {
+      fetchTeachersData();
+    } else if (key === 'admin') {
+      fetchAdminsData();
+    }
+  }, [key]);
 
   return (
-    ///////////////////////////////////////
-   <div className='Catalog'>
-   <NavigationBar showSearch={true}/>
-    <div style={{ maxHeight: 'calc(100vh - 150px)', overflowY: 'auto' }}>
-       <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Password</th>
-            <th>Age</th>
-          </tr>
-        </thead>
-         <tbody>
-          {data.map((item, index) => (
-            <tr key={index} onClick={() => handleRecordClick(item)}>
-              <td>{item.Name}</td>
-              <td>{item.Passwprd}</td>
-              <td>{item.Age}</td>
-              
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+    <div className='Catalog'>
+      <NavigationBar showSearch={true} handleSearch={handleSearch} />
 
- <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Record</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-  <Form>
-    <Form.Group controlId="formTitle">
-      <Form.Label>Title</Form.Label>
-      <Form.Control type="text" value={selectedRecord ? selectedRecord.Name : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Title: e.target.value })} />
-    </Form.Group>
-    <Form.Group controlId="formAuthor">
-      <Form.Label>Author</Form.Label>
-      <Form.Control type="text" value={selectedRecord ? selectedRecord.Passwprd : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Author: e.target.value })} />
-    </Form.Group>
-    <Form.Group controlId="formPrice">
-      <Form.Label>Price</Form.Label>
-      <Form.Control type="text" value={selectedRecord ? selectedRecord.Age : ''} onChange={(e) => setSelectedRecord({ ...selectedRecord, Price: e.target.value })} />
-    </Form.Group>
-  </Form>
-</Modal.Body>
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-3 custom-tabs"
+      >
+        <Tab eventKey="students" title="Students">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Student Id</th>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Grade</th>
+                <th>Date Of Birth</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchQuery === '' ? (
+                studentsData.map((item, index) => (
+                  <tr key={index} onClick={() => handleRecordClick(item)}>
+                    <td>{item.Student_Id}</td>
+                    <td>{item.UserName}</td>
+                    <td>{item.Email}</td>
+                    <td>{item.Grade}</td>
+                    <td>{item.DOB}</td>
+                    <td>{item.Address}</td>
+                    <td>{item.ContactNumber}</td>
+                  </tr>
+                ))
+              ) : (
+                searchResults.map((item, index) => (
+                  <tr key={index} onClick={() => handleRecordClick(item)}>
+                    <td>{item.Student_Id}</td>
+                    <td>{item.UserName}</td>
+                    <td>{item.Email}</td>
+                    <td>{item.Grade}</td> 
+                    <td>{item.DOB}</td>  
+                    <td>{item.Address}</td> 
+                    <td>{item.ContactNumber}</td>               
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
+          <div style={{ position: 'fixed', bottom: '0', right: '0', zIndex: '1000', backgroundColor: 'white', textAlign: 'center', padding: '10px' }}>
+            <img src={addBookView} alt="Add New Book" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={() => setShowAddNewStudentModal(true)} />
+          </div>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => {
-            // Handle update action here
-            console.log("Update record:", selectedRecord);
-            handleCloseModal();
-          }}>
-            Save Changes
-          </Button>
-         
+          <AddNewStudentModule
+            showAddNewStudentModal={showAddNewStudentModal}
+            setShowAddNewStudentModal={setShowAddNewStudentModal}
+          />
+        </Tab>
+        <Tab eventKey="teachers" title="Teachers">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Years of Experience</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teachersData.map((teacher, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{teacher.name}</td>
+                  <td>{teacher.subject}</td>
+                  <td>{teacher.yearsOfExperience}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
 
-        </Modal.Footer>
-      </Modal>
+          <div style={{ position: 'fixed', bottom: '0', right: '0', zIndex: '1000', backgroundColor: 'white', textAlign: 'center', padding: '10px' }}>
+            <img src={addBookView} alt="Add New Book" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={() => setShowAddNewTeacherModal(true)} />
+          </div>
 
+          <AddNewTeacherModule
+            showAddNewTeacherModal={showAddNewTeacherModal}
+            setShowAddNewTeacherModal={setShowAddNewTeacherModal}
+          />
+        </Tab>
+        <Tab eventKey="admin" title="Admin">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Post</th>
+                <th>NIC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {adminsData.map((admin, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{admin.name}</td>
+                  <td>{admin.post}</td>
+                  <td>{admin.nic}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
 
+          <AddNewAdminModule
+            showAddNewAdminModal={showAddNewAdminModal}
+            setShowAddNewAdminModal={setShowAddNewAdminModal}
+          />
 
-
-
-      </div>
-
-      <div style={{ position: 'fixed', bottom: '0', right: '0', zIndex: '1000', backgroundColor: 'white', textAlign: 'center', padding: '10px' }}>
-            <img src={addBook_view} alt="" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={()=>{window.location.href="/AddNewBook"} }/>
-      </div>
-
-      
+          <div style={{ position: 'fixed', bottom: '0', right: '0', zIndex: '1000', backgroundColor: 'white', textAlign: 'center', padding: '10px' }}>
+            <img src={addBookView} alt="Add New Book" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={() => setShowAddNewAdminModal(true)} />
+          </div>
+        </Tab>
+      </Tabs>
     </div>
   );
 }
 
-export default Catalog;
+export default User;

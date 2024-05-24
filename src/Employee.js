@@ -11,6 +11,8 @@ import Modal from 'react-bootstrap/Modal';
 
 import NavigationBar from './NavBar.js';
 
+import QRModal from './QRModal.js';
+
 //import QRCode from 'qrcode.react';
 
 //import QRCodePrinter from './QRPrinter';
@@ -23,6 +25,8 @@ function Catalog() {
   const [data, setData] = useState([]);
 const [selectedRecord, setSelectedRecord] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const [showQRModal, setShowQRModal] = useState(false);
 
   //const [showQRModal, setShowQRModal] = useState(false);
 //const [qrData, setQRData] = useState('');
@@ -129,8 +133,20 @@ const [selectedRecord, setSelectedRecord] = useState(null);
             <img src={addBook_view} alt="" style={{ maxWidth: '100%', maxHeight: '100px' }} onClick={()=>{window.location.href="/AddNewBook"} }/>
       </div>
 
+      <Button variant="success" onClick={()=>setShowQRModal(true)}>
+        Add The Book
+      </Button>
+
+      <QRModal
+      setShowQRModal={setShowQRModal}
+      ShowQRModal={showQRModal}
+
+      />
+
       
     </div>
+
+    
   );
 }
 

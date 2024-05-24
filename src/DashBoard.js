@@ -5,6 +5,8 @@ import OnlineLibrary_view from './Images/OnlineLibrary.png';
 import Report_view from './Images/Report.png';
 import User_view from './Images/User.png';
 import Employee_view from './Images/Employee.png';
+import { Card, Form, Button,ListGroup, ListGroupItem,Badge } from 'react-bootstrap';
+import axios from 'axios';
 
 import NavigationBar from './NavBar.js';
 
@@ -26,6 +28,21 @@ function DashBoard(){
   //const [username, setUsername] = useState('');
 
   //////////////////////////////////////////////////////
+
+  const [notices, setNotices] = useState([]);
+
+  const fetchNotices = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/loadNotices');
+        setNotices(response.data);
+      } catch (error) {
+        console.error('Error fetching notices:', error);
+      }
+    };
+
+  const openGmail = () => {
+    window.open('https://mail.google.com/', '_blank');
+  };
 
 
   
@@ -93,9 +110,11 @@ function stopScanning() {
 
 
     /////////////////////////
-
+fetchNotices();
 
   }, []);
+
+  
     return(
         <div className='DashBoard'>
 
@@ -113,7 +132,7 @@ function stopScanning() {
 
 <div class="card mt-2" >
   <div class="card-body">
-    <h5 class="card-title text-center">Online Library</h5>
+    <h5 class="card-title text-center">Transactions</h5>
     <img src={OnlineLibrary_view} class="mb-2" style={{ width: '100%', height: 'auto' }} alt=''/>
     <h6 class="card-subtitle mb-2 text-body-secondary text-center">Card subtitle</h6>
 
@@ -129,14 +148,7 @@ function stopScanning() {
   </div>
 </div>
 
-<div class="card mt-2" onClick={() => { window.location.href = "/Employee";}}>
-  <div class="card-body">
-    <h5 class="card-title text-center">Employee</h5>
-    <img src={Employee_view} class="mb-2" style={{ width: '100%', height: 'auto' }} alt=''/>
-    <h6 class="card-subtitle mb-2 text-body-secondary text-center">Card subtitle</h6>
-    
-  </div>
-</div>
+
 
 <div class="card mt-2" >
   <div class="card-body">
@@ -153,14 +165,25 @@ function stopScanning() {
 </div>
 <div class="card-group">
 
-<div class="card mt-2" >
-  <div class="card-body">
-    <h5 class="card-title text-center">Email</h5>
-    
-    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-    
-  </div>
-</div>
+<Card className="mt-2 shadow-sm">
+      <Card.Body>
+        <Card.Title className="text-center">Notice Board</Card.Title>
+        <Card.Subtitle className="mb-3 text-muted text-center">Upcoming Events and Announcements</Card.Subtitle>
+        <div style={{ height: '500px', overflowY: 'auto' }}>
+          <ListGroup variant="flush">
+            {notices.map((notice) => (
+              <ListGroupItem key={notice.NoticeId} className="mb-3 border-0 p-3" style={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <h5 className="mb-1">{notice.Title}</h5>
+                  <Badge bg="info" pill>{new Date(notice.PublishDate).toLocaleDateString()}</Badge>
+                </div>
+                <p className="mb-1">{notice.Description}</p>
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
+      </Card.Body>
+    </Card>
 
 <div class="card mt-2 center" >
   <div class="card-body">
@@ -172,28 +195,49 @@ function stopScanning() {
       }
 </div>
 
-<div class="card mt-2" >
-  <div class="card-body">
-    <h5 class="card-title text-center">Email</h5>
-    
-    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-    
-  </div>
-</div>
+<Card className="mt-2">
+      <Card.Body>
+        <Card.Title className="text-center">Email</Card.Title>
+        <Card.Subtitle className="mb-2 text-body-secondary text-center">Open your Gmail account</Card.Subtitle>
+        <div className="text-center">
+          <Button variant="primary" onClick={openGmail}>
+            Open Gmail
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
     
     
   </div>
 </div>
 
 
-<div class="card mt-2" >
-  <div class="card-body">
-    <h5 class="card-title text-center">Notice</h5>
-    
-    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-    
-  </div>
-</div>
+<Card className="mt-2">
+      <Card.Body>
+        <Card.Title className="text-center">Email</Card.Title>
+        <Card.Subtitle className="mb-2 text-body-secondary text-center">Compose your message</Card.Subtitle>
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>To</Form.Label>
+            <Form.Control type="email" placeholder="Enter recipient's email" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicSubject">
+            <Form.Label>Subject</Form.Label>
+            <Form.Control type="text" placeholder="Enter subject" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicMessage">
+            <Form.Label>Message</Form.Label>
+            <Form.Control as="textarea" rows={5} placeholder="Enter your message" />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Send Email
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
 
 </div>
 

@@ -73,7 +73,7 @@ function NavigationBar({ showSearch, handleSearch }) {
                 value={searchQuery}
                 onChange={handleChange}
               />
-              <Button variant="outline-success">Search</Button>
+              <Button variant="outline-success">Help</Button>
             </Form>
           )}
           <Button variant="outline-danger mx-2" style={{ whiteSpace: 'nowrap' }} onClick={handleAlert}>Log Out</Button>
